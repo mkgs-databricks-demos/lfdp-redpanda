@@ -1,8 +1,8 @@
 # The job that triggers rp_enterprise_quickstart_pipeline.
 resources:
   jobs:
-    rp_enterprise_quickstart_job:
-      name: rp_enterprise_quickstart_job
+    rp_cloud_quickstart_job:
+      name: rp_cloud_quickstart_job
 
       trigger:
         # Run this job every day, exactly one day from the last run; see https://docs.databricks.com/api/workspace/jobs/create#trigger
@@ -16,4 +16,4 @@ resources:
       tasks:
         - task_key: refresh_pipeline
           pipeline_task:
-            pipeline_id: ${resources.pipelines.rp_enterprise_quickstart_pipeline.id}
+            pipeline_id: ${resources.pipelines.rp_cloud_quickstart_pipeline.id}
