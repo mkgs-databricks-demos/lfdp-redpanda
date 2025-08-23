@@ -23,4 +23,5 @@ def profiles():
         .option("startingOffsets", "earliest")
         .load()
         .withColumn("value_str", col("value").cast("string"))
+        .withColumn("ingestTime", current_timestamp())
     )
