@@ -4,9 +4,7 @@ from utilities import utils
 
 redpanda_config = utils.get_redpanda_config(spark = spark, dbutils = dbutils)
 
-@dlt.table(
-  spark_conf={"spark.databricks.streaming.realTimeMode.enabled" : "true"}
-)
+@dlt.table()
 def profiles():
     """
     Read Stream from the Redpanda Enterprise Quickstart "logins" topic. 
