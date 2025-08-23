@@ -1,7 +1,7 @@
 # This is a Databricks asset bundle definition for rp_enterprise_quickstart.
 # See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
 bundle:
-  name: rp_enterprise_quickstart
+  name: rp_cloud_quickstart
   uuid: 2e7bbaf0-8b83-4dab-a7f4-2bb273a5011e
 
 include:
