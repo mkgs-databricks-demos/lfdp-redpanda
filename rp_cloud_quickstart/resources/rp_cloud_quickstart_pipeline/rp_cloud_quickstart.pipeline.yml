@@ -2,6 +2,7 @@ resources:
   pipelines:
     rp_cloud_quickstart_pipeline:
       name: rp_cloud_quickstart_pipeline
+      continuous: true
       serverless: true
       channel: "PREVIEW"
       edition: ADVANCED
@@ -10,7 +11,7 @@ resources:
       root_path: "."
       libraries:
         - glob:
-            include: transformations/**
+            include: transformations/profiles.py
       configuration:
         secret_scope: matthew-giglia
         secret_key_user: redpanda_cloud_user
@@ -18,6 +19,5 @@ resources:
         secret_key_bootstrap_server: redpanda_cloud_bootstrap_server
         spark.databricks.streaming.realTimeMode.enabled: "true"
       event_log:
-        name: ${var.event_log_name}
         schema: ${var.event_log_schema}
         catalog: ${var.event_log_catalog}

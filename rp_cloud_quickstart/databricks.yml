@@ -16,6 +16,10 @@ variables:
     description: The schema to use
   notifications:
     description: The email addresses to use for failure notifications
+  event_log_catalog:
+    description: The catalog to use for the event log
+  event_log_schema:
+    description: The schema to use for the event log
 
 targets:
   dev:
@@ -31,6 +35,8 @@ targets:
       catalog: mgiglia
       schema: redpanda
       notifications: []
+      event_log_catalog: ${var.catalog}
+      event_log_schema: data_quality
 
   prod:
     mode: production
