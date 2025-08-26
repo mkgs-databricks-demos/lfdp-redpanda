@@ -2,7 +2,7 @@ resources:
   pipelines:
     rp_cloud_quickstart_pipeline:
       name: rp_cloud_quickstart_pipeline
-      continuous: true
+      continuous: false
       serverless: true
       channel: "PREVIEW"
       edition: ADVANCED

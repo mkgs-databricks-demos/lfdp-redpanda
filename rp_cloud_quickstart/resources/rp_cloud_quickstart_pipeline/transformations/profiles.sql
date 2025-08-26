@@ -4,7 +4,7 @@ TBLPROPERTIES (
   'delta.enableDeletionVectors' = 'true',
   'delta.enableRowTracking' = 'true',
   'delta.feature.variantType-preview' = 'supported',
-  'quality' = 'bronze'
+  'quality' = 'silver'
 )
 AS 
 SELECT 
