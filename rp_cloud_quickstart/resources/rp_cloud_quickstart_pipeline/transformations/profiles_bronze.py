@@ -6,6 +6,12 @@ redpanda_config = utils.get_redpanda_config(spark = spark, dbutils = dbutils)
 
 @dlt.table(
     name = "profiles_bronze"
+    ,table_properties={
+        'quality' : 'bronze'
+        ,'delta.enableChangeDataFeed' : 'true'
+        ,'delta.enableDeletionVectors' : 'true'
+        ,'delta.enableRowTracking' : 'true'
+    }
 )
 def profiles_bronze():
     """
