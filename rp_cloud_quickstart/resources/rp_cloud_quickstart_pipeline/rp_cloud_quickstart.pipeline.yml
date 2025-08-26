@@ -4,6 +4,7 @@ resources:
       name: rp_cloud_quickstart_pipeline
       continuous: false
       serverless: true
+      photon: true
       channel: "PREVIEW"
       edition: ADVANCED
       catalog: ${var.catalog}
@@ -22,6 +23,7 @@ resources:
         secret_key_password: redpanda_cloud_password
         secret_key_bootstrap_server: redpanda_cloud_bootstrap_server
         spark.databricks.streaming.realTimeMode.enabled: "true"
+        pipelines.streamingFlowReadOptionsEnabled: "true"
       event_log:
         schema: ${var.event_log_schema}
         catalog: ${var.event_log_catalog}
