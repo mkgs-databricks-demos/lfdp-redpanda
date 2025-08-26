@@ -5,7 +5,11 @@ from typing import Any
 
 
 def get_redpanda_config(spark: SparkSession, dbutils: Any) -> dict:
-    """Return a dictionary of Redpanda configuration options."""
+    """
+    Return a dictionary of Redpanda configuration options. 
+    Note that a Databricks secret scope with keys for the bootstrap server, username, and password must be created prior to running this utility.
+    Additionally please note that the ScramLoginModule used for the sasl.jaas.config is specific to Databricks Serverless Compute only.  
+    """
 
     secret_scope = spark.conf.get("secret_scope")
     secret_key_user = spark.conf.get("secret_key_user")

@@ -5,7 +5,7 @@ from utilities import utils
 redpanda_config = utils.get_redpanda_config(spark = spark, dbutils = dbutils)
 
 @dlt.table()
-def profiles():
+def profiles_bronze():
     """
     Read Stream from the Redpanda Enterprise Quickstart "logins" topic. 
     """
