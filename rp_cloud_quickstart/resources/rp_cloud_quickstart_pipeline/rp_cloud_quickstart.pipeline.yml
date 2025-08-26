@@ -25,4 +25,4 @@ resources:
       event_log:
         schema: ${var.event_log_schema}
         catalog: ${var.event_log_catalog}
-        name: event_log_${resources.pipeline.rp_cloud_quickstart_pipeline.key}
+        name: event_log_rp_cloud_quickstart_pipeline
