@@ -12,6 +12,8 @@ resources:
       libraries:
         - glob:
             include: transformations/profiles.py
+        - glob:
+            include: /Workspace/Users/matthew.giglia@databricks.com/lfdp-redpanda/rp_cloud_quickstart/resources/rp_cloud_quickstart_pipeline/transformations/profiles_exploded.sql
       configuration:
         secret_scope: matthew-giglia
         secret_key_user: redpanda_cloud_user

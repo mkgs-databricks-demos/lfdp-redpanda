@@ -9,5 +9,9 @@ TBLPROPERTIES (
 AS 
 SELECT 
   *
-  ,parse_json(value_str) as variant_col
-FROM STREAM(profiles);
+  ,profiles_exp.*
+FROM (
+  FROM STREAM(profiles)
+  SELECT *, parse_json(value_str) as variant_col
+)
+,LATERAL variant_explode(variant_col) as profiles_exp;
