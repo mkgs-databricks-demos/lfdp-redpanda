@@ -23,6 +23,6 @@ SELECT
   ,variant_col:subscription_level::string as subscription_level
   ,variant_col:user_id::string as user_id
 FROM (
-  FROM STREAM(profiles)
+  FROM STREAM(profiles_bronze)
   SELECT *, parse_json(value_str) as variant_col
 );
