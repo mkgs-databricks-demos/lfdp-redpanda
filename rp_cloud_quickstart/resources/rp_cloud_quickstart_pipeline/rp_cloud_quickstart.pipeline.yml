@@ -11,11 +11,11 @@ resources:
       root_path: "."
       libraries:
         - glob:
-            include: /Workspace/Users/matthew.giglia@databricks.com/lfdp-redpanda/rp_cloud_quickstart/resources/rp_cloud_quickstart_pipeline/transformations/profiles_bronze.py
+            include: ../rp_cloud_quickstart_pipeline/transformations/profiles_bronze.py
         - glob:
-            include: /Workspace/Users/matthew.giglia@databricks.com/lfdp-redpanda/rp_cloud_quickstart/resources/rp_cloud_quickstart_pipeline/transformations/profiles.sql
+            include: ../rp_cloud_quickstart_pipeline/transformations/profiles.sql
         - glob:
-            include: /Workspace/Users/matthew.giglia@databricks.com/lfdp-redpanda/rp_cloud_quickstart/resources/rp_cloud_quickstart_pipeline/transformations/profiles_cdf.sql
+            include: ../rp_cloud_quickstart_pipeline/transformations/profiles_cdf.sql
       configuration:
         secret_scope: matthew-giglia
         secret_key_user: redpanda_cloud_user
