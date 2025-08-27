@@ -4,6 +4,3 @@ dist/
 __pycache__/
 *.egg-info
 .venv/
-**/explorations/**
-**/!explorations/README.md
-**/!explorations/Delete Records from profiles_bronze.dbquery.ipynb
