@@ -16,7 +16,13 @@ resources:
         - glob:
             include: ../rp_cloud_quickstart_pipeline/transformations/profiles.sql
         - glob:
-            include: ../rp_cloud_quickstart_pipeline/transformations/profiles_cdf.sql
+            include: ../rp_cloud_quickstart_pipeline/transformations/profiles_cdf.py
+        - glob:
+            include: ../rp_cloud_quickstart_pipeline/transformations/profiles_scd2.sql
+        - glob:
+            include: ../rp_cloud_quickstart_pipeline/transformations/mv_offset_deletes.sql
+        - glob:
+            include: ../rp_cloud_quickstart_pipeline/transformations/profile_commits.sql
       configuration:
         secret_scope: matthew-giglia
         secret_key_user: redpanda_cloud_user
