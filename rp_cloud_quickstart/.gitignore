@@ -6,4 +6,4 @@ __pycache__/
 .venv/
 **/explorations/**
 **/!explorations/README.md
-**/!explorations/Delete Records from profiles_bronze.ipynb
+**/!explorations/Delete Records from profiles_bronze.dbquery.ipynb
