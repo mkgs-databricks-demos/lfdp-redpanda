@@ -1,5 +1,5 @@
 -- Create and populate the target table.
-CREATE OR REFRESH STREAMING TABLE profiles
+CREATE OR REFRESH STREAMING TABLE profiles_scd2
 (
   topic STRING,
   partition INT,
@@ -24,8 +24,8 @@ TBLPROPERTIES (
   'quality' = 'silver'
 );
 
-CREATE FLOW profiles_cdc AS AUTO CDC INTO
-  profiles
+CREATE FLOW profiles_cdc_scd2 AS AUTO CDC INTO
+  profiles_scd2
 FROM
   (
     SELECT 
@@ -53,11 +53,9 @@ KEYS
   (topic, partition, offset)
 APPLY AS DELETE WHEN
   _change_type = "delete"
-APPLY AS TRUNCATE WHEN
-  _change_type = "truncate"
 SEQUENCE BY
   (_commit_version, _commit_timestamp)
 COLUMNS * EXCEPT
   (_change_type, _commit_version, _commit_timestamp)
 STORED AS
-  SCD TYPE 1;
+  SCD TYPE 2;

@@ -1,8 +1,6 @@
 import dlt
 
-@dlt.table(
-  temporary=True
-)
+@dlt.view()
 def profiles_cdf():
-  df = spark.readStream.option("readChangeFeed", "true").option('startingVersion', 4).table(f"profiles_bronze")
+  df = spark.readStream.option("readChangeFeed", "true").table(f"profiles_bronze")
   return df
