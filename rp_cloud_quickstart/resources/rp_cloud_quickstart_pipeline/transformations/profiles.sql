@@ -1,12 +1,6 @@
 -- Create and populate the target table.
 CREATE OR REFRESH STREAMING TABLE profiles
 (
-  topic STRING,
-  partition INT,
-  offset BIGINT,
-  timestamp TIMESTAMP_LTZ,
-  timestampType INT,
-  ingestTime TIMESTAMP_LTZ,
   email STRING,
   first_name STRING,
   last_name STRING,
