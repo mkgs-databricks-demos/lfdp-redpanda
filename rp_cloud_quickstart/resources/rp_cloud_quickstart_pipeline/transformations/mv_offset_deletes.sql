@@ -1,8 +1,8 @@
 CREATE OR REFRESH MATERIALIZED VIEW mv_random_offset_deletes AS
 WITH minmax AS (
   SELECT 
-    MIN(offset) AS min_offset,
-    MAX(offset) AS max_offset
+    MIN(source.offset) AS min_offset,
+    MAX(source.offset) AS max_offset
   FROM profiles
 )
 SELECT 

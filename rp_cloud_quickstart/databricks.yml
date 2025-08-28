@@ -19,6 +19,10 @@ variables:
     description: The catalog to use for the event log
   event_log_schema:
     description: The schema to use for the event log
+  run_as_user:
+    description: The principal that the workflows, pipelines or asset creation processed should run as. 
+  redpanda_config_secret_scope:
+    description: The Databricks Secret Scope Containing the Redpanda Config Secret Keys
 
 targets:
   dev:
@@ -27,6 +31,18 @@ targets:
     # - Any job schedules and triggers are paused by default.
     # See also https://docs.databricks.com/dev-tools/bundles/deployment-modes.html.
     mode: development
+    presets:
+      # name_prefix: '[${bundle.target} ${workspace.current_user.short_name}] ' 
+      pipelines_development: true 
+      trigger_pause_status: PAUSED 
+      jobs_max_concurrent_runs: 1 
+      source_linked_deployment: true 
+      tags:
+        project: price_transparency
+        businessUnit: Healthcare and Life Sciences
+        requestedBy: Healthcare Payers
+        developer: matthew.giglia@databricks.com
+        RemoveAfter: 2026-08-24
     default: true
     workspace:
       host: https://e2-demo-field-eng.cloud.databricks.com
@@ -36,6 +52,8 @@ targets:
       notifications: []
       event_log_catalog: ${var.catalog}
       event_log_schema: data_quality
+      run_as_user: matthew.giglia@databricks.com
+      redpanda_config_secret_scope: matthew-giglia
 
   prod:
     mode: production

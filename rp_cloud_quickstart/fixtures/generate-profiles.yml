@@ -9,48 +9,79 @@ input:
     # The language used here is called Bloblang.
     # https://docs.redpanda.com/redpanda-connect/guides/bloblang/about/
     mapping: |
-      # Generate a fake first name using the 'first_name' faker function.
-      let first_name = fake("first_name")
+      # 1/500 chance to emit the fixed user
+      if random_int(min:0, max:499) == 0 {
+        root.user_id = "1e9a820a3a2b70f70c52dd0190b8aa25"
+        root.first_name = "Matthew"
+        root.last_name = "Giglia"
+        root.email = "matthew.giglia@databricks.com"
+        root.registration_date = "2024-03-04"
+        root.last_login = now()
+        root.subscription_level = "Premium"
+        root.preferences.language = "en"
+        root.preferences.notifications = "push"
+        
+        
+      } else {
+        let first_name = fake("first_name")
+        let last_name  = fake("last_name")
+        let subscription_levels = ["Free", "Basic", "Premium"]
+        let notifications = ["email", "sms", "push" ]
+        let languages = ["en", "es", "fr", "de", "zh", "jp"]
 
-      # Generate a fake last name using the 'last_name' faker function.
-      let last_name  = fake("last_name")
+        root.user_id = fake("uuid_digit")
+        root.first_name = $first_name
+        root.last_name = $last_name
+        root.email = ($first_name.slice(0,1) + $last_name + "@" + fake("domain_name")).lowercase()
+        root.registration_date = fake("date")
+        root.last_login = now()
+        root.subscription_level = $subscription_levels.index(random_int(min: 0, max: 2))
+        root.preferences.language = $languages.index(random_int(min: 0, max: 5))
+        root.preferences.notifications = $notifications.index(random_int(min: 0, max: 2))
+      }
+      
+      # # Generate a fake first name using the 'first_name' faker function.
+      # let first_name = fake("first_name")
 
-      # Define possible subscription levels for users.
-      let subscription_levels = ["Free", "Basic", "Premium"]
+      # # Generate a fake last name using the 'last_name' faker function.
+      # let last_name  = fake("last_name")
 
-      # Define possible notification channels for user preferences.
-      let notifications = ["email", "sms", "push" ]
+      # # Define possible subscription levels for users.
+      # let subscription_levels = ["Free", "Basic", "Premium"]
 
-      # Define supported languages for user preferences.
-      let languages = ["en", "es", "fr", "de", "zh", "jp"]
+      # # Define possible notification channels for user preferences.
+      # let notifications = ["email", "sms", "push" ]
 
-      # Assign a unique user ID using a UUID digit generator.
-      root.user_id = fake("uuid_digit")
+      # # Define supported languages for user preferences.
+      # let languages = ["en", "es", "fr", "de", "zh", "jp"]
 
-      # Assign the generated first name to the 'first_name' field.
-      root.first_name = $first_name
+      # # Assign a unique user ID using a UUID digit generator.
+      # root.user_id = fake("uuid_digit")
 
-      # Assign the generated last name to the 'last_name' field.
-      root.last_name = $last_name
+      # # Assign the generated first name to the 'first_name' field.
+      # root.first_name = $first_name
 
-      # Construct the user's email by combining the first initial, last name, and a fake domain name.
-      # The email is converted to lowercase for consistency.
-      root.email = ($first_name.slice(0,1) + $last_name + "@" + fake("domain_name")).lowercase()
+      # # Assign the generated last name to the 'last_name' field.
+      # root.last_name = $last_name
 
-      # Assign a fake registration date using the 'date' faker function.
-      root.registration_date = fake("date")
+      # # Construct the user's email by combining the first initial, last name, and a fake domain name.
+      # # The email is converted to lowercase for consistency.
+      # root.email = ($first_name.slice(0,1) + $last_name + "@" + fake("domain_name")).lowercase()
 
-      # Assign the current timestamp as the last login time.
-      root.last_login = now()
+      # # Assign a fake registration date using the 'date' faker function.
+      # root.registration_date = fake("date")
 
-      # Randomly assign a subscription level by selecting an index from the 'subscription_levels' array.
-      root.subscription_level = $subscription_levels.index(random_int(min: 0, max: 2))
+      # # Assign the current timestamp as the last login time.
+      # root.last_login = now()
 
-      # Randomly assign a language preference by selecting an index from the 'languages' array.
-      root.preferences.language = $languages.index(random_int(min: 0, max: 5))
+      # # Randomly assign a subscription level by selecting an index from the 'subscription_levels' array.
+      # root.subscription_level = $subscription_levels.index(random_int(min: 0, max: 2))
 
-      # Randomly assign a notification preference by selecting an index from the 'notifications' array.
-      root.preferences.notifications = $notifications.index(random_int(min: 0, max: 2))
+      # # Randomly assign a language preference by selecting an index from the 'languages' array.
+      # root.preferences.language = $languages.index(random_int(min: 0, max: 5))
+
+      # # Randomly assign a notification preference by selecting an index from the 'notifications' array.
+      # root.preferences.notifications = $notifications.index(random_int(min: 0, max: 2))
 pipeline:
   processors:
     - mapping: |
