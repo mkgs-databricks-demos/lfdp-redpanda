@@ -1,0 +1,56 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "User Profile",
+    "type": "object",
+    "required": [
+        "email",
+        "first_name",
+        "last_login",
+        "last_name",
+        "preferences",
+        "registration_date",
+        "subscription_level",
+        "user_id"
+    ],
+    "properties": {
+        "email": {
+            "type": "string",
+            "format": "email"
+        },
+        "first_name": {
+            "type": "string"
+        },
+        "last_login": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "last_name": {
+            "type": "string"
+        },
+        "preferences": {
+            "type": "object",
+            "required": [
+                "language",
+                "notifications"
+            ],
+            "properties": {
+                "language": {
+                    "type": "string"
+                },
+                "notifications": {
+                    "type": "string"
+                }
+            }
+        },
+        "registration_date": {
+            "type": "string",
+            "format": "date"
+        },
+        "subscription_level": {
+            "type": "string"
+        },
+        "user_id": {
+            "type": "string"
+        }
+    }
+}
