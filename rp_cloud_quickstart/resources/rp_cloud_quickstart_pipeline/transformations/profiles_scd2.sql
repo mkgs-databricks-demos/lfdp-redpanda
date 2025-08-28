@@ -22,7 +22,6 @@ TBLPROPERTIES (
   'delta.enableChangeDataFeed' = 'true',
   'delta.enableDeletionVectors' = 'true',
   'delta.enableRowTracking' = 'true',
-  'delta.feature.variantType-preview' = 'supported',
   'quality' = 'silver'
 );
 

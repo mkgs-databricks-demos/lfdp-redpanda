@@ -1,28 +1,27 @@
 -- Create and populate the target table.
 CREATE OR REFRESH STREAMING TABLE profiles
 (
-  user_id STRING PRIMARY KEY,
-  email STRING,
-  first_name STRING,
-  last_name STRING,
-  last_login TIMESTAMP_LTZ,
-  registration_date DATE,
-  preferences STRUCT<language: STRING, notifications: STRING>,
-  subscription_level STRING,
+  user_id STRING PRIMARY KEY COMMENT 'Unique identifier for each user',
+  email STRING COMMENT 'User email address',
+  first_name STRING COMMENT 'User first name',
+  last_name STRING COMMENT 'User last name',
+  last_login TIMESTAMP_LTZ COMMENT 'Timestamp of the last login',
+  registration_date DATE COMMENT 'Date of user registration',
+  preferences STRUCT<language: STRING, notifications: STRING> COMMENT 'User preferences including language and notification settings',
+  subscription_level STRING COMMENT 'Level of user subscription',
   source STRUCT<
-    topic STRING,
-    partition INT,
-    offset BIGINT,
-    timestamp TIMESTAMP_LTZ,
-    timestampType INT,
-    ingestTime TIMESTAMP_LTZ
-  >
+    topic: STRING,
+    partition: INT,
+    offset: BIGINT,
+    timestamp: TIMESTAMP_LTZ,
+    timestampType: INT,
+    ingestTime: TIMESTAMP_LTZ
+  > COMMENT 'Information about the source of the data including the kafka topic, partition, offset, timestamp, timestamp type and ingestion time in Databricks.'
 )
 TBLPROPERTIES (
   'delta.enableChangeDataFeed' = 'true',
   'delta.enableDeletionVectors' = 'true',
   'delta.enableRowTracking' = 'true',
-  'delta.feature.variantType-preview' = 'supported',
   'quality' = 'silver'
 );
 
