@@ -39,7 +39,7 @@ targets:
       source_linked_deployment: true 
       tags:
         project: price_transparency
-        businessUnit: Healthcare & Life Sciences
+        businessUnit: Healthcare and Life Sciences
         requestedBy: Healthcare Payers
         developer: matthew.giglia@databricks.com
         RemoveAfter: 2026-08-24
