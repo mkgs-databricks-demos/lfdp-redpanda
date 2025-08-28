@@ -33,10 +33,10 @@ targets:
     mode: development
     presets:
       # name_prefix: '[${bundle.target} ${workspace.current_user.short_name}] ' 
-      pipelines_development: true # set development to true for pipelines
-      trigger_pause_status: PAUSED # set pause_status to PAUSED for all triggers and schedules
-      jobs_max_concurrent_runs: 1 # set max_concurrent runs to 1 for all jobs
-      source_linked_deployment: true # default is true normally for development
+      pipelines_development: true 
+      trigger_pause_status: PAUSED 
+      jobs_max_concurrent_runs: 1 
+      source_linked_deployment: true 
       tags:
         project: price_transparency
         businessUnit: Healthcare & Life Sciences
