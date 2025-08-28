@@ -8,7 +8,8 @@ CREATE OR REFRESH STREAMING TABLE profiles_scd2
   registration_date DATE,
   preferences STRUCT<language: STRING, notifications: STRING>,
   subscription_level STRING,
-  user_id STRING
+  user_id STRING,
+  offset BIGINT
 )
 TBLPROPERTIES (
   'delta.enableChangeDataFeed' = 'true',
@@ -49,6 +50,6 @@ APPLY AS DELETE WHEN
 SEQUENCE BY
   (timestamp)
 COLUMNS * EXCEPT
-  (_change_type, _commit_version, _commit_timestamp, topic, partition, offset, timestamp, timestampType, ingestTime)
+  (_change_type, _commit_version, _commit_timestamp, topic, partition, timestamp, timestampType, ingestTime)
 STORED AS
   SCD TYPE 2;

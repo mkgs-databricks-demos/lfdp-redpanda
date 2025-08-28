@@ -8,7 +8,8 @@ CREATE OR REFRESH STREAMING TABLE profiles
   registration_date DATE,
   preferences STRUCT<language: STRING, notifications: STRING>,
   subscription_level STRING,
-  user_id STRING
+  user_id STRING,
+  offset BIGINT
 )
 TBLPROPERTIES (
   'delta.enableChangeDataFeed' = 'true',
@@ -52,6 +53,6 @@ APPLY AS TRUNCATE WHEN
 SEQUENCE BY
   (timestamp)
 COLUMNS * EXCEPT
-  (_change_type, _commit_version, _commit_timestamp, topic, partition, offset, timestamp, timestampType, ingestTime)
+  (_change_type, _commit_version, _commit_timestamp, topic, partition, timestamp, timestampType, ingestTime)
 STORED AS
   SCD TYPE 1;
