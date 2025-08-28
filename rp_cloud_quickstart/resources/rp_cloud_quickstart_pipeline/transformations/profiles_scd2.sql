@@ -47,8 +47,6 @@ KEYS
   (user_id)
 APPLY AS DELETE WHEN
   _change_type = "delete"
-APPLY AS TRUNCATE WHEN
-  _change_type = "truncate"
 SEQUENCE BY
   (timestamp)
 COLUMNS * EXCEPT
