@@ -27,30 +27,29 @@ TBLPROPERTIES (
 
 CREATE FLOW profiles_cdc AS AUTO CDC INTO
   profiles
-FROM
-  (
-    SELECT 
-      topic
-      ,partition
-      ,offset
-      ,timestamp
-      ,timestampType
-      ,ingestTime
-      ,struct(topic, partition, offset, timestamp, timestampType, ingestTime) as source
-      ,variant_col:email::string as email
-      ,variant_col:first_name::string as first_name
-      ,variant_col:last_name::string as last_name
-      ,variant_col:last_login::timestamp as last_login
-      ,variant_col:registration_date::date as registration_date
-      ,variant_col:preferences::struct<language: string, notifications: string> as preferences
-      ,variant_col:subscription_level::string as subscription_level
-      ,variant_col:user_id::string as user_id
-      ,_change_type, _commit_version, _commit_timestamp
-    FROM (
-      FROM STREAM(profiles_cdf) |>
-      SELECT *, parse_json(value_str) as variant_col
-    )
-  )
+FROM (
+  FROM STREAM(profiles_cdf) |>
+  SELECT *, parse_json(value_str) as variant_col |>
+  SELECT 
+    topic
+    ,partition
+    ,offset
+    ,timestamp
+    ,timestampType
+    ,ingestTime
+    ,struct(topic, partition, offset, timestamp, timestampType, ingestTime) as source
+    ,variant_col:email::string as email
+    ,variant_col:first_name::string as first_name
+    ,variant_col:last_name::string as last_name
+    ,variant_col:last_login::timestamp as last_login
+    ,variant_col:registration_date::date as registration_date
+    ,variant_col:preferences::struct<language: string, notifications: string> as preferences
+    ,variant_col:subscription_level::string as subscription_level
+    ,variant_col:user_id::string as user_id
+    ,_change_type
+    ,_commit_version
+    ,_commit_timestamp
+)
 KEYS
   (user_id)
 APPLY AS DELETE WHEN
