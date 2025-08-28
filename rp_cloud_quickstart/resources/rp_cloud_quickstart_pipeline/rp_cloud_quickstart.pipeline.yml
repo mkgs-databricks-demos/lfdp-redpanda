@@ -8,7 +8,7 @@ resources:
       channel: "PREVIEW"
       edition: ADVANCED
       catalog: ${var.catalog}
-      schema: ${resources.schemas.redpanda.name}
+      schema: ${resources.schemas.redpanda_schema.name}
       root_path: "."
       libraries:
         - glob:
@@ -31,6 +31,6 @@ resources:
         spark.databricks.streaming.realTimeMode.enabled: "true"
         pipelines.streamingFlowReadOptionsEnabled: "true"
       event_log:
-        schema: ${resources.schemas.event_log.name}
+        schema: ${resources.schemas.event_log_schema.name}
         catalog: ${var.event_log_catalog}
         name: event_log_rp_cloud_quickstart_pipeline
