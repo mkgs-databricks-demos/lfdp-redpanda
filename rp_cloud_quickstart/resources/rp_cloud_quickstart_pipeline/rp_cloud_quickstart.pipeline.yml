@@ -23,6 +23,8 @@ resources:
             include: ../rp_cloud_quickstart_pipeline/transformations/mv_offset_deletes.sql
         - glob:
             include: ../rp_cloud_quickstart_pipeline/transformations/profile_commits.sql
+        - glob:
+            include: ../rp_cloud_quickstart_pipeline/transformations/deleted_records.sql
       configuration:
         secret_scope: ${var.redpanda_config_secret_scope}
         secret_key_user: redpanda_cloud_user
