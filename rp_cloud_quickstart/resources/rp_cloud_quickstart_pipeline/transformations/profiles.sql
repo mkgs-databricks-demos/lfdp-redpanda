@@ -59,6 +59,6 @@ APPLY AS TRUNCATE WHEN
 SEQUENCE BY
   (timestamp)
 COLUMNS * EXCEPT
-  (_change_type, _commit_version, _commit_timestamp, topic, partition, timestamp, timestampType, ingestTime)
+  (_change_type, _commit_version, _commit_timestamp, topic, partition, offset, timestamp, timestampType, ingestTime)
 STORED AS
   SCD TYPE 1;
