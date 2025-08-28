@@ -37,7 +37,14 @@ FROM (
     ,timestamp
     ,timestampType
     ,ingestTime
-    ,struct(topic, partition, offset, timestamp, timestampType, ingestTime) as source
+    ,named_struct(
+        'topic', topic,
+        'partition', partition,
+        'offset', offset,
+        'timestamp', timestamp,
+        'timestampType', timestampType,
+        'ingestTime', ingestTime
+     ) as source
     ,variant_col:email::string as email
     ,variant_col:first_name::string as first_name
     ,variant_col:last_name::string as last_name
@@ -57,7 +64,7 @@ APPLY AS DELETE WHEN
 APPLY AS TRUNCATE WHEN
   _change_type = "truncate"
 SEQUENCE BY
-  (timestamp)
+  (timestamp, _commit_timestamp)
 COLUMNS * EXCEPT
   (_change_type, _commit_version, _commit_timestamp, topic, partition, offset, timestamp, timestampType, ingestTime)
 STORED AS
