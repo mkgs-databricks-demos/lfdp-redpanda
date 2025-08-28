@@ -1,0 +1,15 @@
+resources:
+  schemas:
+    event_log_schema:
+      name: ${var.event_log_schema}
+      grants:
+        - principal: users
+          privileges:
+            - SELECT
+            - READ_VOLUME
+            - EXECUTE
+        - principal: ${var.run_as_user}
+          privileges:
+            - MANAGE
+            - ALL_PRIVILEGES
+      catalog_name: ${var.event_log_catalog}

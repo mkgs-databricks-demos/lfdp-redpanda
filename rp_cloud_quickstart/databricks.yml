@@ -19,6 +19,10 @@ variables:
     description: The catalog to use for the event log
   event_log_schema:
     description: The schema to use for the event log
+  run_as_user:
+    description: The principal that the workflows, pipelines or asset creation processed should run as. 
+  redpanda_config_secret_scope:
+    description: The Databricks Secret Scope Containing the Redpanda Config Secret Keys
 
 targets:
   dev:
@@ -36,6 +40,8 @@ targets:
       notifications: []
       event_log_catalog: ${var.catalog}
       event_log_schema: data_quality
+      run_as_user: matthew.giglia@databricks.com
+      redpanda_config_secret_scope: matthew-giglia
 
   prod:
     mode: production
