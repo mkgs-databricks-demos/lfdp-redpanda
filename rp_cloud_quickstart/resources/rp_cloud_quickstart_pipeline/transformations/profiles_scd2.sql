@@ -45,17 +45,19 @@ FROM
       ,variant_col:user_id::string as user_id
       ,_change_type, _commit_version, _commit_timestamp
     FROM (
-      FROM STREAM(profiles_cdf)
+      FROM STREAM(profiles_cdf) |>
       SELECT *, parse_json(value_str) as variant_col
     )
   )
 KEYS
-  (topic, partition, offset)
+  (user_id)
 APPLY AS DELETE WHEN
   _change_type = "delete"
+APPLY AS TRUNCATE WHEN
+  _change_type = "truncate"
 SEQUENCE BY
-  (_commit_version, _commit_timestamp)
+  (timestamp)
 COLUMNS * EXCEPT
-  (_change_type, _commit_version, _commit_timestamp)
+  (_change_type, _commit_version, _commit_timestamp, topic, partition, offset, timestamp, timestampType, ingestTime)
 STORED AS
   SCD TYPE 2;
