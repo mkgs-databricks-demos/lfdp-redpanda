@@ -1,6 +1,7 @@
 -- Create and populate the target table.
 CREATE OR REFRESH STREAMING TABLE profiles
 (
+  user_id STRING PRIMARY KEY,
   email STRING,
   first_name STRING,
   last_name STRING,
@@ -8,8 +9,14 @@ CREATE OR REFRESH STREAMING TABLE profiles
   registration_date DATE,
   preferences STRUCT<language: STRING, notifications: STRING>,
   subscription_level STRING,
-  user_id STRING,
-  offset BIGINT
+  source STRUCT<
+    topic STRING,
+    partition INT,
+    offset BIGINT,
+    timestamp TIMESTAMP_LTZ,
+    timestampType INT,
+    ingestTime TIMESTAMP_LTZ
+  >
 )
 TBLPROPERTIES (
   'delta.enableChangeDataFeed' = 'true',
@@ -30,6 +37,7 @@ FROM
       ,timestamp
       ,timestampType
       ,ingestTime
+      ,struct(topic, partition, offset, timestamp, timestampType, ingestTime) as source
       ,variant_col:email::string as email
       ,variant_col:first_name::string as first_name
       ,variant_col:last_name::string as last_name
