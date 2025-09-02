@@ -4,7 +4,10 @@ from utilities import utils
 
 redpanda_config = utils.get_redpanda_config(spark = spark, dbutils = dbutils)
 
-topics = ["profiles", "hello-world", "__redpanda.connect.status", "__redpanda.connect.logs"]
+topics = ["profiles", "__redpanda.connect.status", "__redpanda.connect.logs"]
+
+# uncomment to see how to ingest multiple topics to bronze tables
+# topics = ["profiles", "hello-world", "__redpanda.connect.status", "__redpanda.connect.logs"]
 
 class Bronze:
     def __init__(self, topic):

@@ -2,6 +2,12 @@ resources:
   pipelines:
     rp_cloud_quickstart_pipeline:
       name: rp_cloud_quickstart_pipeline
+      tags:
+        project: ${var.tags_project}
+        businessUnit: ${var.tags_businessUnit}
+        requestedBy: ${var.tags_requestedBy}
+        developer: ${var.tags_developer}
+        RemoveAfter: ${var.tags_RemoveAfter}
       continuous: false
       serverless: true
       photon: true
@@ -12,7 +18,7 @@ resources:
       root_path: "."
       libraries:
         - glob:
-            include: ../rp_cloud_quickstart_pipeline/transformations/profiles_bronze.py
+            include: ../rp_cloud_quickstart_pipeline/transformations/kafka_bronze.py
         - glob:
             include: ../rp_cloud_quickstart_pipeline/transformations/profiles.sql
         - glob:
