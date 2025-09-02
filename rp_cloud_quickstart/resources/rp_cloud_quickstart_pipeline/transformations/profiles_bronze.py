@@ -6,6 +6,7 @@ redpanda_config = utils.get_redpanda_config(spark = spark, dbutils = dbutils)
 
 topics = ["profiles"]
 
+# uncomment to see how to ingest multiple topics to bronze tables
 # topics = ["profiles", "hello-world", "__redpanda.connect.status", "__redpanda.connect.logs"]
 
 class Bronze:
