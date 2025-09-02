@@ -18,7 +18,7 @@ resources:
       root_path: "."
       libraries:
         - glob:
-            include: ../rp_cloud_quickstart_pipeline/transformations/profiles_bronze.py
+            include: ../rp_cloud_quickstart_pipeline/transformations/kafka_bronze.py
         - glob:
             include: ../rp_cloud_quickstart_pipeline/transformations/profiles.sql
         - glob:
