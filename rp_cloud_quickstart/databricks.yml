@@ -24,7 +24,7 @@ variables:
   redpanda_config_secret_scope:
     description: The Databricks Secret Scope Containing the Redpanda Config Secret Keys
   tags_project: 
-    default: price_transparency
+    default: LFDP Kafka with Redpanda Demos
   tags_businessUnit:
     default: Healthcare and Life Sciences
   tags_developer:
