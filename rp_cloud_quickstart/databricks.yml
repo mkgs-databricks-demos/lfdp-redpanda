@@ -92,7 +92,7 @@ targets:
       - user_name: matthew.giglia@databricks.com
         level: CAN_MANAGE
       - group_name: users
-        level: CAN_RUN
+        level: CAN_VIEW
     variables:
       catalog: mgiglia
       schema: redpanda
