@@ -58,7 +58,7 @@ targets:
       - user_name: matthew.giglia@databricks.com
         level: CAN_MANAGE
       - group_name: users
-        level: CAN_VIEW
+        level: CAN_RUN
     workspace:
       host: https://e2-demo-field-eng.cloud.databricks.com
     variables:
@@ -74,10 +74,10 @@ targets:
     mode: production
     presets:
       # name_prefix: '[${bundle.target} ${workspace.current_user.short_name}] ' 
-      pipelines_development: true 
-      trigger_pause_status: PAUSED 
-      jobs_max_concurrent_runs: 1 
-      source_linked_deployment: true 
+      pipelines_development: false 
+      trigger_pause_status: UNPAUSED 
+      jobs_max_concurrent_runs: 3 
+      source_linked_deployment: false 
       tags:
         project: ${var.tags_project}
         businessUnit: ${var.tags_businessUnit}
@@ -91,7 +91,14 @@ targets:
     permissions:
       - user_name: matthew.giglia@databricks.com
         level: CAN_MANAGE
+      - group_name: users
+        level: CAN_RUN
     variables:
       catalog: mgiglia
       schema: redpanda
       notifications: [matthew.giglia@databricks.com]
+      event_log_catalog: ${var.catalog}
+      event_log_schema: data_quality
+      run_as_user: matthew.giglia@databricks.com
+      redpanda_config_secret_scope: matthew-giglia
+      
