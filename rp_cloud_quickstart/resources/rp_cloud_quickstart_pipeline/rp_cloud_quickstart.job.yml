@@ -17,3 +17,5 @@ resources:
         - task_key: refresh_pipeline
           pipeline_task:
             pipeline_id: ${resources.pipelines.rp_cloud_quickstart_pipeline.id}
+
+

@@ -1,0 +1,15 @@
+resources:
+  schemas:
+    sink_schema:
+      name: kafka_delta_sinks
+      grants:
+        - principal: users
+          privileges:
+            - SELECT
+            - READ_VOLUME
+            - EXECUTE
+        - principal: ${var.run_as_user}
+          privileges:
+            - MANAGE
+            - ALL_PRIVILEGES
+      catalog_name: ${var.catalog}

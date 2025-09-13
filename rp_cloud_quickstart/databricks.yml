@@ -90,6 +90,9 @@ targets:
       host: https://e2-demo-field-eng.cloud.databricks.com
       # We explicitly deploy to /Workspace/Users/matthew.giglia@databricks.com to make sure we only have a single copy.
       root_path: /Workspace/Users/matthew.giglia@databricks.com/.bundle/${bundle.name}/${bundle.target}
+    git:
+      origin_url: https://github.com/mkgs-databricks-demos/lfdp-redpanda.git
+      branch: prod
     permissions:
       - user_name: matthew.giglia@databricks.com
         level: CAN_MANAGE
