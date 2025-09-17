@@ -3,11 +3,6 @@ resources:
     redpanda_schema:
       name: ${var.schema}
       grants:
-        - principal: account users
-          privileges:
-            - SELECT
-            - READ_VOLUME
-            - EXECUTE
         - principal: ${var.run_as_user}
           privileges:
             - MANAGE

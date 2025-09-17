@@ -3,11 +3,6 @@ resources:
     event_log_schema:
       name: ${var.event_log_schema}
       grants:
-        - principal: acount users
-          privileges:
-            - SELECT
-            - READ_VOLUME
-            - EXECUTE
         - principal: ${var.run_as_user}
           privileges:
             - MANAGE
