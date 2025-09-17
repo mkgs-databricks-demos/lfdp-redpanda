@@ -1,6 +1,6 @@
-import dlt
+from pyspark import pipelines as dp
 
-@dlt.view()
+@dp.view()
 def profiles_cdf():
   df = spark.readStream.option("readChangeFeed", "true").table(f"profiles_bronze")
   return df

@@ -1,4 +1,4 @@
-import dlt
+from pyspark import pipelines as pd
 from pyspark.sql import SparkSession
 from pyspark.sql.types import FloatType
 from pyspark.sql.utils import AnalysisException
@@ -56,7 +56,7 @@ class Bronze:
             
         # )
         # df = df.withColumn("recordId", sha2(concat_ws("||", *df.columns), 256))
-        dlt.create_streaming_table(
+        dp.create_streaming_table(
             name = f"{self.topic_name}_bronze"
             ,table_properties={
                 'quality' : 'bronze'
@@ -68,7 +68,7 @@ class Bronze:
             }
         )
 
-        # @dlt.table(
+        # @dp.table(
         #     name = f"{self.topic_name}_bronze"
         #     ,table_properties={
         #         'quality' : 'bronze'
@@ -79,7 +79,7 @@ class Bronze:
         #         ,'delta.autoOptimize.autoCompact': 'true'
         #     }
         # )
-        @dlt.append_flow(
+        @dp.append_flow(
             name = f"flow_{self.topic_name}_bronze"
             ,target = f"{self.topic_name}_bronze"
             ,comment = f"Incremental load of kafka data from {self.topic_name}."
@@ -109,7 +109,7 @@ class Bronze:
                 .withColumn("ingestTime", current_timestamp())
             )
 
-        dlt.create_sink(
+        dp.create_sink(
             name = f"{self.topic_name}_sink" 
             ,format = "delta"
             ,options={
@@ -120,7 +120,7 @@ class Bronze:
             }
         )
 
-        @dlt.append_flow(
+        @dp.append_flow(
             name = f"flow_{self.topic_name}_sink"
             ,target = f"{self.topic_name}_sink"
         )
@@ -128,7 +128,7 @@ class Bronze:
             return self.spark.readStream.table(f"{self.topic_name}_bronze")
         
     def backfill_full_refresh(self):
-        @dlt.append_flow(
+        @dp.append_flow(
             target = f"{self.topic_name}_bronze",
             once = True,
             name = f"flow_refresh_{self.topic_name}_bronze",
