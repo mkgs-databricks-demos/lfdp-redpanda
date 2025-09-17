@@ -1,13 +1,8 @@
 resources:
   schemas:
-    redpanda_schema:
-      name: ${var.schema}
+    sink_schema:
+      name: kafka_delta_sinks
       grants:
-        - principal: users
-          privileges:
-            - SELECT
-            - READ_VOLUME
-            - EXECUTE
         - principal: ${var.run_as_user}
           privileges:
             - MANAGE

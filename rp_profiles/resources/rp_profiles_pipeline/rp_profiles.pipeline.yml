@@ -1,0 +1,50 @@
+resources:
+  pipelines:
+    rp_profiles_pipeline:
+      name: Repanda Profiles Pipeline
+      tags:
+        project: ${var.tags_project}
+        businessUnit: ${var.tags_businessUnit}
+        requestedBy: ${var.tags_requestedBy}
+        developer: ${var.tags_developer}
+        RemoveAfter: ${var.tags_RemoveAfter}
+      continuous: false
+      serverless: true
+      photon: true
+      channel: "PREVIEW"
+      edition: ADVANCED
+      catalog: ${var.catalog}
+      schema: ${resources.schemas.redpanda_schema.name}
+      root_path: "."
+      libraries:
+        - glob:
+            include: ../rp_profiles_pipeline/transformations/kafka_bronze.py
+        - glob:
+            include: ../rp_profiles_pipeline/transformations/profiles.sql
+        - glob:
+            include: ../rp_profiles_pipeline/transformations/profiles_cdf.py
+        - glob:
+            include: ../rp_profiles_pipeline/transformations/profiles_scd2.sql
+        - glob:
+            include: ../rp_profiles_pipeline/transformations/mv_offset_deletes.sql
+        - glob:
+            include: ../rp_profiles_pipeline/transformations/profile_commits.sql
+        - glob:
+            include: ../rp_profiles_pipeline/transformations/deleted_records.sql
+      configuration:
+        secret_scope: ${resources.secret_scopes.repanda_cloud_secret_scope.name}
+        secret_key_user: redpanda_cloud_user
+        secret_key_password: redpanda_cloud_password
+        secret_key_bootstrap_server: redpanda_cloud_bootstrap_server
+        spark.databricks.streaming.realTimeMode.enabled: "true"
+        pipelines.streamingFlowReadOptionsEnabled: "true"
+        spark.databricks.delta.withEventTimeOrder.enabled: "true"
+        catalog_use: ${var.catalog}
+        schema_use: ${resources.schemas.redpanda_schema.name}
+        event_log: ${var.event_log_catalog}.${resources.schemas.event_log_schema.name}.event_log_rp_profiles_pipeline
+        sink_catalog: ${var.catalog}
+        sink_schema: ${resources.schemas.sink_schema.name}
+      event_log:
+        schema: ${resources.schemas.event_log_schema.name}
+        catalog: ${var.event_log_catalog}
+        name: event_log_rp_profiles_pipeline
