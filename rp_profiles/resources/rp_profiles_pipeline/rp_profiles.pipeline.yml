@@ -32,7 +32,7 @@ resources:
         - glob:
             include: ../rp_profiles_pipeline/transformations/deleted_records.sql
       configuration:
-        secret_scope: ${resources.repanda_cloud_secret_scope.name}
+        secret_scope: ${resources.secret_scopes.repanda_cloud_secret_scope.name}
         secret_key_user: redpanda_cloud_user
         secret_key_password: redpanda_cloud_password
         secret_key_bootstrap_server: redpanda_cloud_bootstrap_server
