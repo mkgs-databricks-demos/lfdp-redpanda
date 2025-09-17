@@ -11,10 +11,10 @@ event_log = spark.conf.get("event_log")
 sink_catalog = spark.conf.get("sink_catalog")
 sink_schema = spark.conf.get("sink_schema")
 
-# topics = ["profiles"]
-
+# single topic 
+topics = ["profiles"]
 # uncomment to see how to ingest multiple topics to bronze tables
-topics = ["profiles", "hello-world", "__redpanda.connect.status", "__redpanda.connect.logs"]
+# topics = ["profiles", "hello-world", "__redpanda.connect.status", "__redpanda.connect.logs"]
 
 for topic in topics:
     kakfa_ingest = utils.Bronze(
@@ -26,6 +26,7 @@ for topic in topics:
         ,sink_catalog = sink_catalog
         ,sink_schema = sink_schema
         ,redpanda_config = redpanda_config
+        ,startingOffsets = "earliest"
     )
     kakfa_ingest.topic_ingestion()
     kakfa_ingest.backfill_full_refresh()

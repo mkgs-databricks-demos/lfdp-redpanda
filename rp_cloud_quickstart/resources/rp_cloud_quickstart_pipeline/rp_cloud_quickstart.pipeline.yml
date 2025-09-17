@@ -38,6 +38,7 @@ resources:
         secret_key_bootstrap_server: redpanda_cloud_bootstrap_server
         spark.databricks.streaming.realTimeMode.enabled: "true"
         pipelines.streamingFlowReadOptionsEnabled: "true"
+        spark.databricks.delta.withEventTimeOrder.enabled: "true"
         catalog_use: ${var.catalog}
         schema_use: ${resources.schemas.redpanda_schema.name}
         event_log: ${var.event_log_catalog}.${resources.schemas.event_log_schema.name}.event_log_rp_cloud_quickstart_pipeline
