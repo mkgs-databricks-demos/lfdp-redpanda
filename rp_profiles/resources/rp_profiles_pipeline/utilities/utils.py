@@ -75,19 +75,6 @@ class Bronze:
 
     def topic_ingestion(self):
 
-        bronze_schema = StructType([
-            StructField("recordId", StringType(), True),
-            StructField("key", BinaryType(), True),
-            StructField("value", BinaryType(), True),
-            StructField("topic", StringType(), True),
-            StructField("partition", IntegerType(), True),
-            StructField("offset", LongType(), True),
-            StructField("timestamp", TimestampType(), True),
-            StructField("timestampType", IntegerType(), True),
-            StructField("value_str", StringType(), True),
-            StructField("ingestTime", TimestampType(), True)
-        ])
-
         # define target streaming table for bronze ingestion
         dp.create_streaming_table(
             name = f"{self.topic_name}_bronze"
@@ -123,10 +110,11 @@ class Bronze:
             name = f"{self.topic_name}_sink" 
             ,format = "delta"
             ,options={
-                "tableName": f"{self.sink_catalog}.{self.sink_schema}.{self.topic_name}_sink",
-                "quality": "bronze",
-                "delta.autoOptimize.optimizeWrite": "true",
-                "delta.autoOptimize.autoCompact": "true"
+                "tableName": f"{self.sink_catalog}.{self.sink_schema}.{self.topic_name}_sink"
+                ,"quality": "bronze"
+                ,"delta.autoOptimize.optimizeWrite": "true"
+                ,"delta.autoOptimize.autoCompact": "true"
+                ,'delta.enableRowTracking' : 'true'
             }
         )
 
@@ -144,14 +132,13 @@ class Bronze:
                 .withColumn("ingestTime", current_timestamp())
             )
 
-        # incremental update of delta sink 
+        # incremental update of delta sink from bronze table
         @dp.append_flow(
             name = f"flow_from_bronze_{self.topic_name}_sink"
             ,target = f"{self.topic_name}_sink"
-            ,once = True
             ,comment = f"Incremental update of delta sink from bronze table."
         )
-        def delta_sink_flow_from_source():
+        def delta_sink_flow_from_bronze():
             return (
                 self.spark.readStream
                 .option('skipChangeCommits','true')
@@ -168,9 +155,10 @@ class Bronze:
         def backfill():
             try: 
                 df = (
-                    self.spark.readStream
+                    self.spark.read
                     .option('skipChangeCommits','true')
                     .table(f"{self.sink_catalog}.{self.sink_schema}.{self.topic_name}_sink")
+                    .dropDuplicates(["recordId"])
                 )
             except AnalysisException:
                 df = (
