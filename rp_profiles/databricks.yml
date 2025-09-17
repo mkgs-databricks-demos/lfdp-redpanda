@@ -68,7 +68,7 @@ targets:
     workspace:
       host: https://dbc-e5684c0a-20fa.cloud.databricks.com/
     variables:
-      catalog: repanda_${bundle.target}
+      catalog: redpanda_${bundle.target}
       schema: profiles
       notifications: []
       event_log_catalog: ${var.catalog}
