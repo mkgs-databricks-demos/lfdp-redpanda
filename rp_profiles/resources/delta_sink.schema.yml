@@ -3,7 +3,7 @@ resources:
     sink_schema:
       name: kafka_delta_sinks
       grants:
-        - principal: users
+        - principal: account users
           privileges:
             - SELECT
             - READ_VOLUME
