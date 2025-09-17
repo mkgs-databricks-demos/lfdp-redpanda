@@ -149,9 +149,14 @@ class Bronze:
             name = f"flow_from_bronze_{self.topic_name}_sink"
             ,target = f"{self.topic_name}_sink"
             ,once = True
+            ,comment = f"Incremental update of delta sink from bronze table."
         )
         def delta_sink_flow_from_source():
-            return self.spark.readStream.table(f"{self.topic_name}_bronze")
+            return (
+                self.spark.readStream
+                .option('skipChangeCommits','true')
+                .table(f"{self.topic_name}_bronze")
+            )
 
         # full refresh backfill of bronze table from delta sink
         @dp.append_flow(
@@ -162,7 +167,11 @@ class Bronze:
         )
         def backfill():
             try: 
-                df = self.spark.read.table(f"{self.sink_catalog}.{self.sink_schema}.{self.topic_name}_sink")
+                df = (
+                    self.spark.readStream
+                    .option('skipChangeCommits','true')
+                    .table(f"{self.sink_catalog}.{self.sink_schema}.{self.topic_name}_sink")
+                )
             except AnalysisException:
                 df = (
                     self.spark.range(0)
