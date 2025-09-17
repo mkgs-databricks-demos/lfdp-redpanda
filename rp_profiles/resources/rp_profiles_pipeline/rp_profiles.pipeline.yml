@@ -41,10 +41,10 @@ resources:
         spark.databricks.delta.withEventTimeOrder.enabled: "true"
         catalog_use: ${var.catalog}
         schema_use: ${resources.schemas.redpanda_schema.name}
-        event_log: ${var.event_log_catalog}.${resources.schemas.event_log_schema.name}.event_log_rp_cloud_quickstart_pipeline
+        event_log: ${var.event_log_catalog}.${resources.schemas.event_log_schema.name}.event_log_rp_profiles_pipeline
         sink_catalog: ${var.catalog}
         sink_schema: ${resources.schemas.sink_schema.name}
       event_log:
         schema: ${resources.schemas.event_log_schema.name}
         catalog: ${var.event_log_catalog}
-        name: event_log_rp_cloud_quickstart_pipeline
+        name: event_log_rp_profiles_pipeline
