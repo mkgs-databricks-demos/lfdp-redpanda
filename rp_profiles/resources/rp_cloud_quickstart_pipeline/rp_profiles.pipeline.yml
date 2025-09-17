@@ -1,7 +1,7 @@
 resources:
   pipelines:
-    rp_cloud_quickstart_pipeline:
-      name: rp_cloud_quickstart_pipeline
+    rp_profiles_pipeline:
+      name: Repanda Profiles Pipeline
       tags:
         project: ${var.tags_project}
         businessUnit: ${var.tags_businessUnit}
