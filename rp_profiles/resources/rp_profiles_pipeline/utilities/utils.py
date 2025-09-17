@@ -1,4 +1,4 @@
-from pyspark import pipelines as pd
+from pyspark import pipelines as dp
 from pyspark.sql import SparkSession
 from pyspark.sql.types import FloatType
 from pyspark.sql.utils import AnalysisException
