@@ -2,7 +2,7 @@
 resources:
   jobs:
     rp_profiles_job:
-      name: Repanda Profiles Workflow
+      name: Redpanda Profiles Workflow
 
       trigger:
         # Run this job every day, exactly one day from the last run; see https://docs.databricks.com/api/workspace/jobs/create#trigger

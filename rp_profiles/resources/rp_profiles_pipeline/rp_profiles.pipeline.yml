@@ -1,7 +1,7 @@
 resources:
   pipelines:
     rp_profiles_pipeline:
-      name: Repanda Profiles Pipeline
+      name: Redpanda Profiles Pipeline
       tags:
         project: ${var.tags_project}
         businessUnit: ${var.tags_businessUnit}
