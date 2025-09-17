@@ -3,7 +3,7 @@ resources:
     redpanda_schema:
       name: ${var.schema}
       grants:
-        - principal: users
+        - principal: account users
           privileges:
             - SELECT
             - READ_VOLUME
