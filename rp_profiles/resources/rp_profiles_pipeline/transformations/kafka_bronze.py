@@ -26,7 +26,6 @@ for topic in topics:
         ,sink_catalog = sink_catalog
         ,sink_schema = sink_schema
         ,redpanda_config = redpanda_config
-        ,startingOffsets = "earliest"
+        ,startingOffsets = "latest"
     )
     kakfa_ingest.topic_ingestion()
-    kakfa_ingest.backfill_full_refresh()
