@@ -18,21 +18,21 @@ resources:
       root_path: "."
       libraries:
         - glob:
-            include: ../rp_cloud_quickstart_pipeline/transformations/kafka_bronze.py
+            include: ../rp_profiles_pipeline/transformations/kafka_bronze.py
         - glob:
-            include: ../rp_cloud_quickstart_pipeline/transformations/profiles.sql
+            include: ../rp_profiles_pipeline/transformations/profiles.sql
         - glob:
-            include: ../rp_cloud_quickstart_pipeline/transformations/profiles_cdf.py
+            include: ../rp_profiles_pipeline/transformations/profiles_cdf.py
         - glob:
-            include: ../rp_cloud_quickstart_pipeline/transformations/profiles_scd2.sql
+            include: ../rp_profiles_pipeline/transformations/profiles_scd2.sql
         - glob:
-            include: ../rp_cloud_quickstart_pipeline/transformations/mv_offset_deletes.sql
+            include: ../rp_profiles_pipeline/transformations/mv_offset_deletes.sql
         - glob:
-            include: ../rp_cloud_quickstart_pipeline/transformations/profile_commits.sql
+            include: ../rp_profiles_pipeline/transformations/profile_commits.sql
         - glob:
-            include: ../rp_cloud_quickstart_pipeline/transformations/deleted_records.sql
+            include: ../rp_profiles_pipeline/transformations/deleted_records.sql
       configuration:
-        secret_scope: ${var.redpanda_config_secret_scope}
+        secret_scope: ${resources.repanda_cloud_secret_scope.name}
         secret_key_user: redpanda_cloud_user
         secret_key_password: redpanda_cloud_password
         secret_key_bootstrap_server: redpanda_cloud_bootstrap_server

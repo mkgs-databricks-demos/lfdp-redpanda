@@ -74,7 +74,7 @@ targets:
       event_log_catalog: ${var.catalog}
       event_log_schema: data_quality
       run_as_user: matthew.giglia@databricks.com
-      redpanda_config_secret_scope: matthew-giglia
+      redpanda_config_secret_scope: redpanda-zm4e6i
 
   dev_fe_aws:
     # The default target uses 'mode: development' to create a development copy.
