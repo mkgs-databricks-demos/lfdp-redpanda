@@ -2,5 +2,14 @@
   "topic": "deleted_profiles"
   ,"table_name": "deleted_records_from_profiles_bronze"
   ,"key_columns": ["user_id"]
-  ,"value_columns": ["email", "first_name", "last_name", "last_login", "registraion_date", "preferences", "subscription_level", "source"]
+  ,"value_columns": ["email", "first_name", "last_name", "last_login"],
+  "transformation": [
+    "parse_json(value_str) as variant_col", 
+    [
+      "variant_col:email::string as email", 
+      "variant_col:first_name::string as first_name",
+      "variant_col:last_name::string as last_name",
+      "variant_col:user_id::string as user_id"
+    ]
+  ]
 }

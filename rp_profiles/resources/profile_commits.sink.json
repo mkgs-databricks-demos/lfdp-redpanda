@@ -1,0 +1,7 @@
+{
+  "topic": "deleted_profiles"
+  ,"table_name": "deleted_records_from_profiles_bronze"
+  ,"key_columns": ["commit_version"]
+  ,"value_columns": ["email", "first_name", "last_name", "last_login", "registraion_date", "preferences", "subscription_level", "source"],
+  "transformation": ["select parse_json(value_str) as variant_col", "select variant_col:email::string as email,variant_col:firstname::string as firstname,variant_col:lastname::string as lastname,variant_col:last_login::timestamp as last_login,variant_col:registraion_date::timestamp as registration_date,variant_col:preferences::struct<language: string, notifications: string> as preferences,variant_col:subscription_level::string as subscription_level"]
+}

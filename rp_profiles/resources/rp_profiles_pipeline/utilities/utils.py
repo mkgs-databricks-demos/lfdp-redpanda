@@ -178,3 +178,56 @@ class Bronze:
                 )
             return df
 
+
+class Sink:
+    def __init__(self, spark: SparkSession, topic: str, table_name: str, key_columns: list, value_columns: list, redpanda_config: dict, transformations: list = None):
+        self.spark = spark
+        self.topic = topic
+        self.table_name = table_name
+        self.key_columns = key_columns
+        self.value_columns = value_columns
+        self.redpanda_config = redpanda_config
+        self.transformations = transformations
+
+    def table_sink_to_kafka(self):
+
+        dp.create_sink(
+            name = f"{self.table_name}_{topic}_sink"
+            ,format = "kafka"
+            ,options = {
+                "kafka.bootstrap.servers": self.redpanda_config.get("bootstrap.servers")
+                ,"topic": self.topic
+                ,"kafka.sasl.mechanism": self.redpanda_config.get("sasl.mechanism")
+                ,"kafka.security.protocol": self.redpanda_config.get("security.protocol")
+                ,"kafka.sasl.jaas.config": self.redpanda_config.get("sasl.jaas.config")
+            }
+        )
+       
+        key_expr = ','.join(self.key_columns)
+        value_expr = ','.join(self.value_columns)
+        # transformations = ','.join(self.transformations)
+        expr = f"to_json(struct({key_expr})) as key", f"to_json(struct({value_expr})) AS value"
+
+        @dp.append_flow(name = "kafka_sink_flow", target = "eh_sink")
+        def kafka_sink_flow():
+            df = self.spark.table(self.table_name)
+            for transformation in self.transformations:
+                df = df.selectExpr("*", transformation)
+            df = df.selectExpr(*expr)
+        return df
+
+
+        
+       
+        
+
+
+                     
+
+
+
+
+
+
+
+

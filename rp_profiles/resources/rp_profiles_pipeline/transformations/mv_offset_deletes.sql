@@ -11,5 +11,5 @@ SELECT
     else FLOOR(minmax.min_offset + (minmax.max_offset - minmax.min_offset) * random()) 
   END AS random_offsets
 FROM minmax
-CROSS JOIN (SELECT explode(sequence(0, 9)) AS n) t2
+CROSS JOIN (SELECT explode(sequence(0, 26)) AS n) t2
 ;
