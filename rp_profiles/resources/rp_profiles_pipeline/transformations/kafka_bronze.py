@@ -1,5 +1,3 @@
-# import dlt
-# from pyspark.sql.functions import col, current_timestamp
 from utilities import utils
 
 redpanda_config = utils.get_redpanda_config(spark = spark, dbutils = dbutils)
