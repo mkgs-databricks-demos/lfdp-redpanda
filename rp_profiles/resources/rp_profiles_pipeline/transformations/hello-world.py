@@ -1,10 +1,10 @@
-import dlt
+from pyspark import pipelines as dp
 from pyspark.sql.functions import col
 from utilities import utils
 
 redpanda_config = utils.get_redpanda_config(spark = spark, dbutils = dbutils)
 
-@dlt.table
+@dp.table
 def hello_world():
     """
     Read Stream from the Redpanda Enterprise Quickstart "logins" topic. 

@@ -18,7 +18,8 @@ CREATE OR REFRESH STREAMING TABLE profiles
     timestampType: INT,
     ingestTime: TIMESTAMP_LTZ
   > COMMENT 'Information about the source of the data including the kafka topic, partition, offset, timestamp, timestamp type and ingestion time in Databricks.',
-  CONSTRAINT valid_language EXPECT (preferences.language = 'en') ON VIOLATION DROP ROW
+  CONSTRAINT valid_language EXPECT (preferences.language = 'en') ON VIOLATION DROP ROW,
+  CONSTRAINT preferred_email_non_null EXPECT (case when preference.notifications = 'email' and email is not null then true else false end)
 )
 TBLPROPERTIES (
   'delta.enableChangeDataFeed' = 'true',
