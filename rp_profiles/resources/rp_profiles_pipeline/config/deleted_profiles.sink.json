@@ -3,7 +3,7 @@
   ,"table_name": "deleted_records_from_profiles_bronze"
   ,"key_columns": ["user_id"]
   ,"value_columns": ["email", "first_name", "last_name", "last_login"],
-  "transformation": [
+  "transformations": [
     "parse_json(value_str) as variant_col", 
     [
       "variant_col:email::string as email", 

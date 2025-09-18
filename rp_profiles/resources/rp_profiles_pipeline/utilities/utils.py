@@ -192,7 +192,7 @@ class Sink:
     def table_sink_to_kafka(self):
 
         dp.create_sink(
-            name = f"{self.table_name}_{topic}_sink"
+            name = f"{self.table_name}_{self.topic}_sink"
             ,format = "kafka"
             ,options = {
                 "kafka.bootstrap.servers": self.redpanda_config.get("bootstrap.servers")
