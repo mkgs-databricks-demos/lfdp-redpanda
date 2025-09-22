@@ -105,48 +105,6 @@ class Bronze:
                 .withColumn("ingestTime", current_timestamp())
             )
 
-    def sink_init(self):
-        # create delta sink for backfill on full refresh
-        dp.create_sink(
-            name = f"{self.topic_name}_sink" 
-            ,format = "delta"
-            ,options={
-                "tableName": f"{self.sink_catalog}.{self.sink_schema}.{self.topic_name}_sink"
-                ,"quality": "bronze"
-                ,"delta.autoOptimize.optimizeWrite": "true"
-                ,"delta.autoOptimize.autoCompact": "true"
-                ,'delta.enableRowTracking' : 'true'
-            }
-        )
-
-        # initial delta sink creation from source stream
-        @dp.append_flow(
-            name = f"flow_from_source_{self.topic_name}_sink"
-            ,target = f"{self.topic_name}_sink"
-            ,once = True
-        )
-        def delta_sink_flow_from_source():
-            df = self.stream_kafka(self, starting_offsets = "earliest")
-            return (
-                df
-                .withColumn("value_str", col("value").cast("string"))
-                .withColumn("ingestTime", current_timestamp())
-            )
-
-    def refresh_sink(self, )
-        # incremental update of delta sink from bronze table
-        @dp.append_flow(
-            name = f"flow_from_bronze_{self.topic_name}_sink"
-            ,target = f"{self.topic_name}_sink"
-            ,comment = f"Incremental update of delta sink from bronze table."
-        )
-        def delta_sink_flow_from_bronze():
-            return (
-                self.spark.readStream
-                .option('skipChangeCommits','true')
-                .table(f"{self.topic_name}_bronze")
-            )
-
         # full refresh backfill of bronze table from delta sink
         @dp.append_flow(
             name = f"flow_refresh_{self.topic_name}_bronze"
@@ -159,25 +117,81 @@ class Bronze:
                 self.spark.read
                 .option('skipChangeCommits','true')
                 .table(f"{self.sink_catalog}.{self.sink_schema}.{self.topic_name}_sink")
+                .arrangeBy("ingestTime")
                 .dropDuplicates(["recordId"])
             )
-            except AnalysisException:
-                df = (
-                    self.spark.range(0)
-                    .selectExpr(
-                        "CAST(NULL AS STRING) AS recordId",
-                        "CAST(NULL AS BINARY) AS key",
-                        "CAST(NULL AS BINARY) AS value",
-                        "CAST(NULL AS STRING) AS topic",
-                        "CAST(NULL AS INT) AS partition",
-                        "CAST(NULL AS BIGINT) AS offset",
-                        "CAST(NULL AS TIMESTAMP) AS timestamp",
-                        "CAST(NULL AS INT) AS timestampType",
-                        "CAST(NULL AS STRING) AS value_str",
-                        "CAST(NULL AS TIMESTAMP) AS ingestTime"
-                    )
+            # except AnalysisException:
+            #     df = (
+            #         self.spark.range(0)
+            #         .selectExpr(
+            #             "CAST(NULL AS STRING) AS recordId",
+            #             "CAST(NULL AS BINARY) AS key",
+            #             "CAST(NULL AS BINARY) AS value",
+            #             "CAST(NULL AS STRING) AS topic",
+            #             "CAST(NULL AS INT) AS partition",
+            #             "CAST(NULL AS BIGINT) AS offset",
+            #             "CAST(NULL AS TIMESTAMP) AS timestamp",
+            #             "CAST(NULL AS INT) AS timestampType",
+            #             "CAST(NULL AS STRING) AS value_str",
+            #             "CAST(NULL AS TIMESTAMP) AS ingestTime"
+            #         )
+            #     )
+            # return df
+
+    def sink_init(self):
+        # create delta sink for backfill on full refresh
+        dp.create_sink(
+            name = f"{self.sink_catalog}.{self.sink_schema}.{self.topic_name}_sink" 
+            ,format = "delta"
+            ,options={
+                "tableName": f"{self.sink_catalog}.{self.sink_schema}.{self.topic_name}_sink"
+                ,"quality": "bronze"
+                ,"delta.autoOptimize.optimizeWrite": "true"
+                ,"delta.autoOptimize.autoCompact": "true"
+                ,'delta.enableRowTracking' : 'true'
+            }
+        )
+
+        # initial delta sink creation from source stream
+        @dp.append_flow(
+            name = f"flow_from_source_{self.topic_name}_to_sink"
+            ,target = f"{self.sink_catalog}.{self.sink_schema}.{self.topic_name}_sink"
+            ,once = True
+        )
+        def delta_sink_flow_from_source():
+            df = self.stream_kafka(self, starting_offsets = "earliest")
+            return (
+                df
+                .withColumn("value_str", col("value").cast("string"))
+                .withColumn("ingestTime", current_timestamp())
+            )
+
+    def refresh_sink(self, from_bronze: bool = True)
+        if from_bronze:
+            # incremental update of delta sink from bronze table
+            @dp.append_flow(
+                name = f"flow_from_bronze_{self.topic_name}_to_sink"
+                ,target = f"{self.sink_catalog}.{self.sink_schema}.{self.topic_name}_sink"
+                ,comment = f"Incremental update of delta sink from bronze table."
+            )
+            def delta_sink_flow_from_bronze():
+                return (
+                    self.spark.readStream
+                    .option('skipChangeCommits','true')
+                    .table(f"{self.topic_name}_bronze")
                 )
-            return df
+        else:
+            @dp.append_flow(
+                name = f"flow_refresed_from_source_{self.topic_name}_to_sink"
+                ,target = f"{self.sink_catalog}.{self.sink_schema}.{self.topic_name}_sink"
+            )
+            def delta_sink_flow_from_source():
+                df = self.stream_kafka(self, starting_offsets = "earliest")
+                return (
+                    df
+                    .withColumn("value_str", col("value").cast("string"))
+                    .withColumn("ingestTime", current_timestamp())
+                )
 
 
 class Sink:
