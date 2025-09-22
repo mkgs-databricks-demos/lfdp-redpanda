@@ -46,7 +46,7 @@ class Bronze:
     def __init__(self, spark: SparkSession, topic: str, catalog: str, schema: str, sink_catalog: str, sink_schema: str, event_log: str, redpanda_config: dict, startingOffsets: str = "latest"):
         self.spark = spark
         self.topic = topic
-        self.catalog = catalog
+        self.catalog = catalog 
         self.schema = schema
         self.event_log = event_log
         self.sink_catalog = sink_catalog
@@ -115,10 +115,7 @@ class Bronze:
         def backfill(): 
             return (
                 self.spark.read
-                .option('skipChangeCommits','true')
-                .table(f"{self.sink_catalog}.{self.sink_schema}.{self.topic_name}_sink")
-                .arrangeBy("ingestTime")
-                .dropDuplicates(["recordId"])
+                .table(f"v_{topic}_sink")
             )
             # except AnalysisException:
             #     df = (
@@ -166,7 +163,7 @@ class Bronze:
                 .withColumn("ingestTime", current_timestamp())
             )
 
-    def refresh_sink(self, from_bronze: bool = True)
+    def refresh_sink(self, from_bronze: bool = True):
         if from_bronze:
             # incremental update of delta sink from bronze table
             @dp.append_flow(
