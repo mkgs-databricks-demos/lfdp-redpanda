@@ -117,23 +117,6 @@ class Bronze:
                 self.spark.read
                 .table(f"v_{self.topic_name}_sink")
             )
-            # except AnalysisException:
-            #     df = (
-            #         self.spark.range(0)
-            #         .selectExpr(
-            #             "CAST(NULL AS STRING) AS recordId",
-            #             "CAST(NULL AS BINARY) AS key",
-            #             "CAST(NULL AS BINARY) AS value",
-            #             "CAST(NULL AS STRING) AS topic",
-            #             "CAST(NULL AS INT) AS partition",
-            #             "CAST(NULL AS BIGINT) AS offset",
-            #             "CAST(NULL AS TIMESTAMP) AS timestamp",
-            #             "CAST(NULL AS INT) AS timestampType",
-            #             "CAST(NULL AS STRING) AS value_str",
-            #             "CAST(NULL AS TIMESTAMP) AS ingestTime"
-            #         )
-            #     )
-            # return df
 
     def sink_init(self):
         # create delta sink for backfill on full refresh
@@ -191,7 +174,7 @@ class Bronze:
                 )
 
 
-class Sink:
+class SinkToKafka:
     def __init__(self, spark: SparkSession, topic: str, table_name: str, key_columns: list, value_columns: list, redpanda_config: dict, transformations: list = None):
         self.spark = spark
         self.topic = topic
@@ -242,4 +225,21 @@ class Sink:
 
 
 
-
+#### archive hold ###############################################
+            # except AnalysisException:
+            #     df = (
+            #         self.spark.range(0)
+            #         .selectExpr(
+            #             "CAST(NULL AS STRING) AS recordId",
+            #             "CAST(NULL AS BINARY) AS key",
+            #             "CAST(NULL AS BINARY) AS value",
+            #             "CAST(NULL AS STRING) AS topic",
+            #             "CAST(NULL AS INT) AS partition",
+            #             "CAST(NULL AS BIGINT) AS offset",
+            #             "CAST(NULL AS TIMESTAMP) AS timestamp",
+            #             "CAST(NULL AS INT) AS timestampType",
+            #             "CAST(NULL AS STRING) AS value_str",
+            #             "CAST(NULL AS TIMESTAMP) AS ingestTime"
+            #         )
+            #     )
+            # return df

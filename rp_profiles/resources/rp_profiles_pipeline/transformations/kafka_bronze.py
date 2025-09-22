@@ -3,11 +3,12 @@ from utilities import utils
 redpanda_config = utils.get_redpanda_config(spark = spark, dbutils = dbutils)
 
 # spark config 
-catalog_use = spark.conf.get("catalog_use")
+catalog_use = spark.conf.get("catalog_use") 
 schema_use = spark.conf.get("schema_use")
 event_log = spark.conf.get("event_log")
 sink_catalog = spark.conf.get("sink_catalog")
-sink_schema = spark.conf.get("sink_schema")
+sink_schema = spark.conf.get("sink_schema") 
+refresh_sink_from_bronze = spark.conf.get("refresh_sink_from_bronze") == "true"
 
 # single topic 
 topics = ["profiles"]
@@ -15,7 +16,7 @@ topics = ["profiles"]
 # topics = ["profiles", "hello-world", "__redpanda.connect.status", "__redpanda.connect.logs"]
 
 for topic in topics:
-    kakfa_ingest = utils.Bronze(
+    kafka_ingest = utils.Bronze(
         spark = spark
         ,topic = topic
         ,catalog = catalog_use
@@ -26,4 +27,6 @@ for topic in topics:
         ,redpanda_config = redpanda_config
         ,startingOffsets = "latest"
     )
-    kakfa_ingest.topic_ingestion()
+    kafka_ingest.sink_init()
+    kafka_ingest.topic_ingestion()
+    kafka_ingest.refresh_sink(from_bronze = refresh_sink_from_bronze)
