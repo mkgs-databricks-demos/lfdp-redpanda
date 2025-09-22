@@ -121,7 +121,7 @@ class Bronze:
     def sink_init(self):
         # create delta sink for backfill on full refresh
         dp.create_sink(
-            name = f"{self.sink_catalog}.{self.sink_schema}.{self.topic_name}_sink" 
+            name = f"{self.topic_name}_sink" 
             ,format = "delta"
             ,options={
                 "tableName": f"{self.sink_catalog}.{self.sink_schema}.{self.topic_name}_sink"
@@ -225,7 +225,7 @@ class SinkToKafka:
 
 
 
-#### archive hold ###############################################
+#### archive hold ##############################
             # except AnalysisException:
             #     df = (
             #         self.spark.range(0)
