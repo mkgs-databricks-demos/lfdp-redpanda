@@ -115,7 +115,7 @@ class Bronze:
         def backfill(): 
             return (
                 self.spark.read
-                .table(f"v_{topic}_sink")
+                .table(f"v_{self.topic_name}_sink")
             )
             # except AnalysisException:
             #     df = (
@@ -171,7 +171,7 @@ class Bronze:
                 ,target = f"{self.sink_catalog}.{self.sink_schema}.{self.topic_name}_sink"
                 ,comment = f"Incremental update of delta sink from bronze table."
             )
-            def delta_sink_flow_from_bronze():
+            def refresh_delta_sink_flow_from_bronze():
                 return (
                     self.spark.readStream
                     .option('skipChangeCommits','true')
@@ -182,7 +182,7 @@ class Bronze:
                 name = f"flow_refresed_from_source_{self.topic_name}_to_sink"
                 ,target = f"{self.sink_catalog}.{self.sink_schema}.{self.topic_name}_sink"
             )
-            def delta_sink_flow_from_source():
+            def refresh_delta_sink_flow_from_source():
                 df = self.stream_kafka(self, starting_offsets = "earliest")
                 return (
                     df
