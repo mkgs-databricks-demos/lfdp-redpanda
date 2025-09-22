@@ -2,6 +2,10 @@ from utilities import utils
 import os
 import json
 
+# spark config 
+catalog_use = spark.conf.get("catalog_use")
+schema_use = spark.conf.get("schema_use")
+
 redpanda_config = utils.get_redpanda_config(spark = spark, dbutils = dbutils)
 
 sink_config_dir = "../config"
@@ -16,7 +20,7 @@ for table_definition in table_definitions:
     kakfa_sink = utils.Sink(
         spark = spark
         ,topic = table_definition.get("topic")
-        ,table_name = table_definition.get("table_name")
+        ,table_name = f"{catalog_use}.{schema_use}.{table_definition.get("table_name")}"
         ,key_columns = table_definition.get("key_columns")
         ,value_columns = table_definition.get("value_columns")
         ,transformations = table_definition.get("transformations", None)

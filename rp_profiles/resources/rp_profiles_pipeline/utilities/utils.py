@@ -105,6 +105,7 @@ class Bronze:
                 .withColumn("ingestTime", current_timestamp())
             )
 
+    def sink_init(self):
         # create delta sink for backfill on full refresh
         dp.create_sink(
             name = f"{self.topic_name}_sink" 
@@ -132,6 +133,7 @@ class Bronze:
                 .withColumn("ingestTime", current_timestamp())
             )
 
+    def refresh_sink(self, )
         # incremental update of delta sink from bronze table
         @dp.append_flow(
             name = f"flow_from_bronze_{self.topic_name}_sink"
@@ -152,14 +154,13 @@ class Bronze:
             ,once = True
             ,comment = f"Backfill data no longer available in kafka in bronze from delta sink on full refresh."
         )
-        def backfill():
-            try: 
-                df = (
-                    self.spark.read
-                    .option('skipChangeCommits','true')
-                    .table(f"{self.sink_catalog}.{self.sink_schema}.{self.topic_name}_sink")
-                    .dropDuplicates(["recordId"])
-                )
+        def backfill(): 
+            return (
+                self.spark.read
+                .option('skipChangeCommits','true')
+                .table(f"{self.sink_catalog}.{self.sink_schema}.{self.topic_name}_sink")
+                .dropDuplicates(["recordId"])
+            )
             except AnalysisException:
                 df = (
                     self.spark.range(0)
@@ -192,7 +193,7 @@ class Sink:
     def table_sink_to_kafka(self):
 
         dp.create_sink(
-            name = f"{self.table_name}_{self.topic}_sink"
+            name = f"{self.topic}_sink"
             ,format = "kafka"
             ,options = {
                 "kafka.bootstrap.servers": self.redpanda_config.get("bootstrap.servers")
@@ -208,13 +209,13 @@ class Sink:
         # transformations = ','.join(self.transformations)
         expr = f"to_json(struct({key_expr})) as key", f"to_json(struct({value_expr})) AS value"
 
-        @dp.append_flow(name = "kafka_sink_flow", target = "eh_sink")
+        @dp.append_flow(name = "kafka_sink_flow", target = f"{self.topic}_sink")
         def kafka_sink_flow():
-            df = self.spark.table(self.table_name)
+            df = self.spark.readStream.table(self.table_name)
             for transformation in self.transformations:
                 df = df.selectExpr("*", transformation)
             df = df.selectExpr(*expr)
-        return df
+            return df
 
 
         
