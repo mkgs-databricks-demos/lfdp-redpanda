@@ -1,4 +1,25 @@
 from pyspark import pipelines as dp
+from pyspark.sql import SparkSession
+from pyspark.sql.types import (
+    StructType
+    ,StructField
+    ,StringType
+    ,BinaryType
+    ,IntegerType
+    ,LongType
+    ,TimestampType
+    ,FloatType
+)
+from pyspark.sql.utils import AnalysisException
+from pyspark.sql.functions import (
+    col
+    ,current_timestamp
+    ,lit
+    ,udf
+    ,sha2
+    ,concat_ws
+)
+from typing import Any
 
 sink_catalog = spark.conf.get("sink_catalog")
 sink_schema = spark.conf.get("sink_schema")
@@ -20,7 +41,7 @@ for topic in topics:
             )
         except AnalysisException:
             df = (
-                self.spark.range(0)
+                spark.range(0)
                 .selectExpr(
                     "CAST(NULL AS STRING) AS recordId",
                     "CAST(NULL AS BINARY) AS key",
