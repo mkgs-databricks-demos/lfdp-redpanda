@@ -145,7 +145,20 @@ class Bronze:
                 .withColumn("value_str", col("value").cast("string"))
                 .withColumn("ingestTime", current_timestamp())
             )
-    # def refresh_sink(self, from_bronze: bool = True):
+        
+        @dp.append_flow(
+            name = f"flow_from_bronze_{self.topic_name}_to_sink"
+            ,target = f"{self.topic_name}_sink" 
+            ,comment = f"Incremental update of delta sink from bronze table."
+        )
+        def refresh_delta_sink_flow_from_bronze():
+            return (
+                self.spark.readStream
+                .option('skipChangeCommits','true')
+                .table(f"{self.topic_name}_bronze")
+            )
+
+    def refresh_sink(self, from_bronze: bool = True):
         if from_bronze:
             # incremental update of delta sink from bronze table
             @dp.append_flow(

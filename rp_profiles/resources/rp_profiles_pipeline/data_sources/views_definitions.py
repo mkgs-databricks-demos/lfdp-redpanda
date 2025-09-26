@@ -10,13 +10,31 @@ for topic in topics:
         name = f"v_{topic}_sink"
     )
     def read_sink():
-        return (
-            spark.read
-            .option('skipChangeCommits','true')
-            .table(f"{sink_catalog}.{sink_schema}.{topic}_sink")
-            .orderBy("ingestTime")
-            .dropDuplicates(["recordId"])
-        )
+        try:
+            df = (
+                spark.read
+                .option('skipChangeCommits','true')
+                .table(f"{sink_catalog}.{sink_schema}.{topic}_sink")
+                .orderBy("ingestTime")
+                .dropDuplicates(["recordId"])
+            )
+        except AnalysisException:
+            df = (
+                self.spark.range(0)
+                .selectExpr(
+                    "CAST(NULL AS STRING) AS recordId",
+                    "CAST(NULL AS BINARY) AS key",
+                    "CAST(NULL AS BINARY) AS value",
+                    "CAST(NULL AS STRING) AS topic",
+                    "CAST(NULL AS INT) AS partition",
+                    "CAST(NULL AS BIGINT) AS offset",
+                    "CAST(NULL AS TIMESTAMP) AS timestamp",
+                    "CAST(NULL AS INT) AS timestampType",
+                    "CAST(NULL AS STRING) AS value_str",
+                    "CAST(NULL AS TIMESTAMP) AS ingestTime"
+                )
+            )
+        return df
     
     @dp.view(
         name = f"{topic}_cdf"
