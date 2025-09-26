@@ -27,6 +27,6 @@ for topic in topics:
         ,redpanda_config = redpanda_config
         ,startingOffsets = "latest"
     )
-    kafka_ingest.sink_init()
+    kafka_ingest.sink_kafka_to_delta()
     kafka_ingest.topic_ingestion()
-    kafka_ingest.refresh_sink(from_bronze = refresh_sink_from_bronze)
+    # kafka_ingest.refresh_sink(from_bronze = refresh_sink_from_bronze)

@@ -118,7 +118,7 @@ class Bronze:
                 .table(f"v_{self.topic_name}_sink")
             )
 
-    def sink_init(self):
+    def sink_kafka_to_delta(self, from_bronze: bool = True):
         # create delta sink for backfill on full refresh
         dp.create_sink(
             name = f"{self.topic_name}_sink" 
@@ -135,7 +135,7 @@ class Bronze:
         # initial delta sink creation from source stream
         @dp.append_flow(
             name = f"flow_from_source_{self.topic_name}_to_sink"
-            ,target = f"{self.sink_catalog}.{self.sink_schema}.{self.topic_name}_sink"
+            ,target = f"{self.topic_name}_sink" 
             ,once = True
         )
         def delta_sink_flow_from_source():
@@ -145,13 +145,12 @@ class Bronze:
                 .withColumn("value_str", col("value").cast("string"))
                 .withColumn("ingestTime", current_timestamp())
             )
-
-    def refresh_sink(self, from_bronze: bool = True):
+    # def refresh_sink(self, from_bronze: bool = True):
         if from_bronze:
             # incremental update of delta sink from bronze table
             @dp.append_flow(
                 name = f"flow_from_bronze_{self.topic_name}_to_sink"
-                ,target = f"{self.sink_catalog}.{self.sink_schema}.{self.topic_name}_sink"
+                ,target = f"{self.topic_name}_sink" 
                 ,comment = f"Incremental update of delta sink from bronze table."
             )
             def refresh_delta_sink_flow_from_bronze():
@@ -162,8 +161,8 @@ class Bronze:
                 )
         else:
             @dp.append_flow(
-                name = f"flow_refresed_from_source_{self.topic_name}_to_sink"
-                ,target = f"{self.sink_catalog}.{self.sink_schema}.{self.topic_name}_sink"
+                name = f"flow_refreshed_from_source_{self.topic_name}_to_sink"
+                ,target = f"{self.topic_name}_sink" 
             )
             def refresh_delta_sink_flow_from_source():
                 df = self.stream_kafka(self, starting_offsets = "earliest")
