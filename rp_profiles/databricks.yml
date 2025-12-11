@@ -68,8 +68,8 @@ targets:
     workspace:
       host: https://fe-vm-mkgs-databricks-demos.cloud.databricks.com/
     variables:
-      catalog: redpanda_${bundle.target}
-      schema: profiles
+      catalog: mkgs_dev
+      schema: redpanda
       notifications: []
       event_log_catalog: ${var.catalog}
       event_log_schema: data_quality
