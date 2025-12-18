@@ -66,10 +66,10 @@ targets:
       - group_name: users
         level: CAN_RUN
     workspace:
-      host: https://dbc-e5684c0a-20fa.cloud.databricks.com/
+      host: https://fe-vm-mkgs-databricks-demos.cloud.databricks.com/
     variables:
-      catalog: redpanda_${bundle.target}
-      schema: profiles
+      catalog: mkgs_dev
+      schema: redpanda
       notifications: []
       event_log_catalog: ${var.catalog}
       event_log_schema: data_quality
